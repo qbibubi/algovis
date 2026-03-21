@@ -1,4 +1,23 @@
-#include "../include/ui/menu.hpp"
+#include "../include/ui/menu.h"
+#include "../include/ui/window.h"
+#include "../include/ui/visualizer.h"
+
+#include <concepts>
+
+template<typename T>
+concept ui_view = requires(T& view) {
+    { view.get_running() } -> std::convertible_to<bool>;
+    view.draw();
+    view.input();
+};
+
+template<ui_view T>
+void run_view(T& view) {
+    while (view.get_running()) {
+        view.draw();
+        view.input();
+    }
+}
 
 int main() {
     window_t window;
@@ -8,10 +27,7 @@ int main() {
 
         {
             menu_t menu;
-            while (menu.running()) {
-                menu.draw();
-                menu.input();
-            }
+            run_view(menu);
 
             selected_index = menu.get_selected_index();
         }
@@ -20,11 +36,8 @@ int main() {
         refresh();
 
         {
-            sorting_t visualizer(algorithms[selected_index]);
-            while (visualizer.running()) {
-                visualizer.draw();
-                visualizer.input();
-            }
+            visualizer_t visualizer(algorithms[selected_index]);
+            run_view(visualizer);
         }
 
         clear();

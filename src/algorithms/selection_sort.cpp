@@ -1,11 +1,7 @@
-#pragma once
-#include <utility>
-#include <vector>
-#include <cstdint>
+#include "../../include/algorithms/selection_sort.h"
 
-namespace selection {
-inline void sort(std::vector<uint32_t>& v) {
-    auto const size = v.size();
+void selection_sort(std::vector<uint32_t>& v) {
+    std::size_t const size = v.size();
 
     for (std::size_t i = 0; i < size - 1; ++i) {
         std::size_t min = i;
@@ -19,4 +15,3 @@ inline void sort(std::vector<uint32_t>& v) {
         std::swap(v[i], v[min]);
     }
 }
-} // namespace selection

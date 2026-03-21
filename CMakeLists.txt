@@ -18,11 +18,21 @@ add_compile_options(
 
 add_executable(sorting
     src/main.cpp
+
+    src/ui/menu.cpp
+    src/ui/visualizer.cpp
+    src/ui/window.cpp
+
+    src/algorithms/bubble_sort.cpp
+    src/algorithms/insertion_sort.cpp
+    src/algorithms/quick_sort.cpp
+    src/algorithms/selection_sort.cpp
 )
 
+target_compile_features(sorting PRIVATE cxx_std_20)
+
 target_include_directories(sorting PRIVATE 
-    ${CMAKE_SOURCE_DIR}/include/*.hpp
-    ${CMAKE_SOURCE_DIR}/include/ui/*.hpp
+    include
     ${CURSES_INCLUDE_DIRS}
 )
 

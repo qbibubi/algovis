@@ -4,6 +4,8 @@
 #include <algorithm>
 
 menu_t::menu_t() {
+    running = true;
+
     auto const menu_padding_x = 6;
     auto const menu_padding_y = 2;
 
@@ -11,13 +13,15 @@ menu_t::menu_t() {
     auto const max_string_length = (it != algorithms.end()) ? it->size() : 0;
 
     width = std::max<int>(max_string_length + menu_padding_x, title.size() + menu_padding_x);
-    height = algorithms.size() + menu_padding_y;
+    height = static_cast<int>(algorithms.size() + menu_padding_y);
 
     auto const center_x = (COLS - width) / 2;
     auto const center_y = (LINES - height) / 2;
 
     view = newwin(height, width, center_y, center_x);
-    if (!view) return;
+    if (!view) {
+        return; 
+    }
     
     keypad(view, true);
 }
@@ -31,9 +35,12 @@ menu_t::~menu_t() {
 void menu_t::draw() {
     box(view, 0, 0);
     
-    mvwprintw(view, 0, (width - title.size()) / 2, "%.*s", static_cast<int>(title.size()), title.data());
+    auto const text_x = static_cast<int>((width - title.size()) / 2);
+    auto const text_size = static_cast<int>(title.size());
+
+    mvwprintw(view, 0, text_x, "%.*s", text_size, title.data());
     
-    for (size_t i = 0; i < algorithms.size(); ++i) {
+    for (std::size_t i = 0; i < algorithms.size(); ++i) {
         if (i == selected_index) wattron(view, A_REVERSE);
     
         mvwprintw(
@@ -59,8 +66,11 @@ void menu_t::input() {
             break;
         case keys::w:
         case keys::k:
-            selected_index--;
-            if (selected_index< 0) selected_index= algorithms.size() - 1;
+            if (selected_index == 0) { 
+                selected_index = algorithms.size() - 1;
+            } else {
+                selected_index--;
+            }
             break;
         case keys::s:
         case keys::j:
@@ -70,10 +80,6 @@ void menu_t::input() {
         case keys::a: break;
         case keys::d: break;
     }
-}
-
-bool menu_t::get_running() const {
-    return running;
 }
         
 int menu_t::get_selected_index() const {

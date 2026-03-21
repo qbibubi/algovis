@@ -25,11 +25,6 @@ window_t::~window_t() {
     endwin();
 }
 
-WINDOW* window_t::get_window() const {
-    return window;
-}
-
 bool window_t::get_running() const {
     return running;
 }
-

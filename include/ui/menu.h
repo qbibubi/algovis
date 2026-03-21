@@ -1,5 +1,5 @@
 #pragma once
-#include <ncurses.h>
+#include "view_interface.h"
 #include <array>
 #include <string_view>
 
@@ -23,23 +23,18 @@ auto constexpr algorithms = std::to_array<std::string_view>({
     "Heap sort"
 });
 
-class menu_t {
+class menu_t : public view_interface_t {
 public:
     menu_t();
-    ~menu_t();
+    ~menu_t() override;
 
-public:
-    void draw();
-    void input();
+    void draw() override;
+    void input() override;
 
-    bool get_running() const;            
     int get_selected_index() const;
 
 private:
     std::string_view title = "Select an algorithm";
-    WINDOW* view = nullptr;
-    int width = 0, height = 0;
-    int selected_index = 0;
-    bool running = true;
+    std::size_t selected_index = 0;
 };
 

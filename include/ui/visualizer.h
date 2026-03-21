@@ -1,20 +1,16 @@
 #pragma once
-#include <ncurses.h>
+#include "view_interface.h"
 #include <string_view>
 
-class visualizer_t {
+class visualizer_t : public view_interface_t {
 public:
     explicit visualizer_t(std::string_view algo_name);
-    ~visualizer_t();
+    ~visualizer_t() override;
 
-    void draw();
-    void input();
-    bool get_running() const;
+    void draw() override;
+    void input() override;
 
 private:
-    WINDOW* view = nullptr;
     std::string_view algorithm;
-    int width = 0, height = 0;
-    bool running = false;
 };
 

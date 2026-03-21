@@ -8,7 +8,7 @@ BUILD_DIR = build
 all: build
 
 $(BUILD_DIR)/CmakeCache.txt:
-	cmake -S . -B $(BUILD_DIR) 
+	cmake -S . -B $(BUILD_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
 
 configure: $(BUILD_DIR)/CmakeCache.txt
 

@@ -1,0 +1,23 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+BreakBeforeBraces: Attach
+PointerAlignment: Left
+ReferenceAlignment: Left
+SpaceBeforeParens: ControlStatements
+SpacesInAngles: Never
+SpaceAfterTemplateKeyword: false
+SpaceBeforeRangeBasedForLoopColon: true
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortLambdasOnASingleLine: Inline
+SortIncludes: false
+AlignConsecutiveDeclarations: None
+AlignConsecutiveAssignments: None
+InsertTrailingCommas: None
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerIndentWidth: 4

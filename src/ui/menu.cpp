@@ -1,87 +1,76 @@
 #include "../../include/ui/menu.h"
 
-#include <ranges>
 #include <algorithm>
+#include <ranges>
 
-menu_t::menu_t() {
-    running = true;
+namespace {
+constexpr int KeyEnter = 10;
+constexpr int KeyW = 119;
+constexpr int KeyS = 115;
+constexpr int KeyJ = 106;
+constexpr int KeyK = 107;
+} // namespace
 
-    auto const menu_padding_x = 6;
-    auto const menu_padding_y = 2;
+AlgorithmMenu::AlgorithmMenu() {
+    constexpr int paddingX = 6;
+    constexpr int paddingY = 2;
 
-    auto it = std::ranges::max_element(algorithms, {}, &std::string_view::size); 
-    auto const max_string_length = (it != algorithms.end()) ? it->size() : 0;
+    auto const longest = std::ranges::max_element(AlgorithmRegistry, {}, [](AlgorithmEntry const& entry) { return entry.Name.size(); });
+    auto const maxNameLen = (longest != AlgorithmRegistry.end()) ? longest->Name.size() : 0u;
 
-    width = std::max<int>(max_string_length + menu_padding_x, title.size() + menu_padding_x);
-    height = static_cast<int>(algorithms.size() + menu_padding_y);
+    Width = static_cast<int>(std::max(maxNameLen, Title.size())) + paddingX;
+    Height = static_cast<int>(AlgorithmRegistry.size()) + paddingY;
 
-    auto const center_x = (COLS - width) / 2;
-    auto const center_y = (LINES - height) / 2;
+    auto const centerX = (COLS - Width) / 2;
+    auto const centerY = (LINES - Height) / 2;
 
-    view = newwin(height, width, center_y, center_x);
-    if (!view) {
-        return; 
-    }
-    
-    keypad(view, true);
-}
-
-menu_t::~menu_t() {
-    if(view) { 
-        delwin(view);
-    }
-}
-
-void menu_t::draw() {
-    box(view, 0, 0);
-    
-    auto const text_x = static_cast<int>((width - title.size()) / 2);
-    auto const text_size = static_cast<int>(title.size());
-
-    mvwprintw(view, 0, text_x, "%.*s", text_size, title.data());
-    
-    for (std::size_t i = 0; i < algorithms.size(); ++i) {
-        if (i == selected_index) wattron(view, A_REVERSE);
-    
-        mvwprintw(
-            view, 
-            i + 1, 2, 
-            "%-*.*s", 
-            width - 4, 
-            static_cast<int>(algorithms[i].size()), algorithms[i].data()
-        );
-
-        if (i == selected_index) wattroff(view, A_REVERSE);
+    View = NcursesWindow{newwin(Height, Width, centerY, centerX)};
+    if (!View) {
+        return;
     }
 
-    wrefresh(view);
+    keypad(View.Get(), TRUE);
+
+    IsRunning = true;
 }
 
-void menu_t::input() {
-    auto const key = static_cast<keys>(wgetch(view));
+void AlgorithmMenu::Draw() {
+    box(View.Get(), 0, 0);
 
-    switch (key) {
-        case keys::enter:
-            running = false;
-            break;
-        case keys::w:
-        case keys::k:
-            if (selected_index == 0) { 
-                selected_index = algorithms.size() - 1;
-            } else {
-                selected_index--;
-            }
-            break;
-        case keys::s:
-        case keys::j:
-            selected_index++;
-            if (selected_index >= static_cast<int>(algorithms.size())) selected_index = 0;
-            break;
-        case keys::a: break;
-        case keys::d: break;
+    auto const titleX = static_cast<int>((Width - static_cast<int>(Title.size())) / 2);
+    auto const titleSize = static_cast<int>(Title.size());
+
+    mvwprintw(View.Get(), 0, titleX, "%.*s", titleSize, Title.data());
+
+    for (std::size_t i = 0; i < AlgorithmRegistry.size(); ++i) {
+        if (i == SelectedIndex) {
+            wattron(View.Get(), A_REVERSE);
+        }
+
+        mvwprintw(View.Get(), static_cast<int>(i) + 1, 2, "%-*.*s", Width - 4, static_cast<int>(AlgorithmRegistry[i].Name.size()), AlgorithmRegistry[i].Name.data());
+
+        if (i == SelectedIndex) {
+            wattroff(View.Get(), A_REVERSE);
+        }
     }
+
+    wrefresh(View.Get());
 }
-        
-int menu_t::get_selected_index() const {
-    return selected_index;
+
+void AlgorithmMenu::Input() {
+    switch (wgetch(View.Get())) {
+    case KeyEnter:
+        IsRunning = false;
+        break;
+    case KeyW:
+    case KeyK:
+        SelectedIndex = (SelectedIndex == 0) ? AlgorithmRegistry.size() - 1 : SelectedIndex - 1;
+        break;
+    case KeyS:
+    case KeyJ:
+        SelectedIndex = (SelectedIndex + 1 >= AlgorithmRegistry.size()) ? 0 : SelectedIndex + 1;
+        break;
+    default:
+        break;
+    }
 }

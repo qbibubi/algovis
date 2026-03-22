@@ -1,30 +1,25 @@
-#include "../../include/ui/window.h"
+#include "../include/ui/window.h"
 
 #include <cstdlib>
 
-window_t::window_t() {
-    window = initscr();
-    if (!window) {
+ApplicationWindow::ApplicationWindow() {
+    Window = initscr();
+    if (!Window)
         exit(1);
-    }
 
     if (start_color() == ERR || !has_colors()) {
         endwin();
         exit(1);
     }
-    
+
     clear();
     noecho();
     cbreak();
     curs_set(0);
 
-    running = true;
+    IsRunning = true;
 }
 
-window_t::~window_t() {
+ApplicationWindow::~ApplicationWindow() {
     endwin();
-}
-
-bool window_t::get_running() const {
-    return running;
 }

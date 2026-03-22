@@ -27,6 +27,7 @@ add_executable(sorting
     src/algorithms/insertion_sort.cpp
     src/algorithms/quick_sort.cpp
     src/algorithms/selection_sort.cpp
+    src/algorithms/heap_sort.cpp
 )
 
 target_compile_features(sorting PRIVATE cxx_std_20)

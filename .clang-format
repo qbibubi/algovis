@@ -3,7 +3,7 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
-ColumnLimit: 100
+ColumnLimit: 200
 BreakBeforeBraces: Attach
 PointerAlignment: Left
 ReferenceAlignment: Left
@@ -21,3 +21,4 @@ AlignConsecutiveAssignments: None
 InsertTrailingCommas: None
 BreakConstructorInitializers: BeforeColon
 ConstructorInitializerIndentWidth: 4
+

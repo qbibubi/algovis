@@ -1,16 +1,27 @@
 #pragma once
 #include <ncurses.h>
 
-class window_t  {
-public:
-    window_t(); 
-    ~window_t();
+/**
+ * @brief Manages the ncurses library lifecycle for the entire application.
+ * @class ApplicationWindow
+ *
+ * Handles initialization of ncurses on construction and cleanup on destruction.
+ * Provides a simple running state for the main application loop.
+ */
+class ApplicationWindow {
+  public:
+    ApplicationWindow();
+    ~ApplicationWindow();
 
-public:
-    bool get_running() const;
+    ApplicationWindow(ApplicationWindow const&) = delete;
+    ApplicationWindow& operator=(ApplicationWindow const&) = delete;
 
-private:
-    WINDOW* window = nullptr;
-    bool running = false;
+    /**
+     * @return true if the application should continue running.
+     */
+    [[nodiscard]] bool GetIsRunning() const { return IsRunning; }
+
+  private:
+    WINDOW* Window = nullptr;
+    bool IsRunning = false;
 };
-

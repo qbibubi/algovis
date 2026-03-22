@@ -1,31 +1,41 @@
+#include "../include/core/registry.h"
 #include "../include/ui/menu.h"
-#include "../include/ui/window.h"
 #include "../include/ui/visualizer.h"
+#include "../include/ui/window.h"
 
+/**
+ * @brief Main application entry point.
+ * @details Runs a loop: show algorithm selection menu, then run the selected
+ *          algorithm with visualization, until the user exits.
+ */
 int main() {
-    window_t window;
+    ApplicationWindow application;
 
-    while (true) {
-        std::size_t selected_index = 0;
-
+    while (application.GetIsRunning()) {
+        std::size_t selectedIndex = 0;
         {
-            menu_t menu;
-            while (menu.get_running()) {
-                menu.draw();
-                menu.input();
+            AlgorithmMenu menu;
+            while (menu.GetIsRunning()) {
+                menu.Draw();
+                menu.Input();
             }
-
-            selected_index = menu.get_selected_index();
+            selectedIndex = menu.GetSelectedIndex();
         }
 
         clear();
         refresh();
 
         {
-            visualizer_t visualizer(algorithms[selected_index]);
-            while (visualizer.get_running()) {
-                visualizer.draw();
-                visualizer.input();
+            auto const& entry = AlgorithmRegistry[selectedIndex];
+
+            SortingVisualizer visualizer{entry.Name};
+            visualizer.GenerateData();
+
+            entry.Execute(visualizer, visualizer.GetData());
+
+            while (visualizer.GetIsRunning()) {
+                visualizer.Input();
+                visualizer.Draw();
             }
         }
 

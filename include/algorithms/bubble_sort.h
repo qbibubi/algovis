@@ -1,7 +1,18 @@
 #pragma once
-#include <vector>
-#include <cstdint>
+#include "../../include/core/sort_observer.h"
 
-void bubble_sort(std::vector<uint32_t>& v);
-void bubble_sort_extended(std::vector<uint32_t>& v);
-void bubble_sort_extended_flag(std::vector<uint32_t> & v);
+#include <span>
+
+/**
+ * @brief Bubble sort algorithm with visualization support.
+ * @param observer Observer for step-by-step visualization callbacks.
+ * @param data Span of integers to sort in-place.
+ *
+ * Visual markers:
+ *   j  (cyan)   - Left element of current comparison pair
+ *   J  (red)    - Right element of current comparison pair
+ *
+ * Connection bracket spans [j, j+1] and advances rightward each step.
+ * After each outer pass, the rightmost unsorted bar is marked sorted (green).
+ */
+void BubbleSort(SortObserver& observer, std::span<int> data);

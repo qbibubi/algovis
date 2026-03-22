@@ -6,6 +6,8 @@ Linux terminal application for visualizing sorting algorithms in real-time using
 
 AlgoVis demonstrates sorting algorithms through animated visualizations in the terminal. Each algorithm is instrumented to emit step-by-step events, allowing you to observe how elements are compared, swapped, and sorted. The visualization displays bars of varying heights with color-coded markers indicating algorithm state.
 
+![Demo](./assets/demo.gif)
+
 ## Architecture
 
 ```

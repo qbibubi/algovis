@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.3)
 
-project(SORTING VERSION 0.1 LANGUAGES CXX)
+project(algovis VERSION 0.1 LANGUAGES CXX)
 
 set(CURSES_NEED_NCURSES TRUE)
 set(CURSES_NEED_WIDE TRUE)
@@ -16,7 +16,7 @@ add_compile_options(
     -Wextra
 )
 
-add_executable(sorting
+add_executable(algovis
     src/main.cpp
 
     src/ui/menu.cpp
@@ -30,14 +30,14 @@ add_executable(sorting
     src/algorithms/heap_sort.cpp
 )
 
-target_compile_features(sorting PRIVATE cxx_std_20)
+target_compile_features(algovis PRIVATE cxx_std_20)
 
-target_include_directories(sorting PRIVATE 
+target_include_directories(algovis PRIVATE 
     include
     ${CURSES_INCLUDE_DIRS}
 )
 
-target_link_libraries(sorting PRIVATE
+target_link_libraries(algovis PRIVATE
     ${CURSES_LIBRARIES}
 )
 
